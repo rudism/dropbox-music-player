@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    script(src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js")
+    script(src="//code.jquery.com/jquery-2.1.4.min.js")
+    link(rel="stylesheet" href="music.css")
+  body
+    div.container
+      header
+        div.nav
+          ul
+            li.signedin#user
+            li.signedin: a#settingslink(href="#") Settings
+            li#signin: a(href="#") Sign In
+            li#signout: a(href="#") Sign Out
+      div#settings
+        form#settingsform
+          label Music Path
+          input#musicpath(type="text")
+          input#savesettings(type="button" value="Save")
+    script(src="music.js")
