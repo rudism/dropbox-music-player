@@ -20,7 +20,10 @@ gulp.task 'stylus', ->
     .pipe gulp.dest './public/'
 
 gulp.task 'copy', ->
-  gulp.src './src/*.json'
+  gulp.src [
+    './src/*.json'
+    './src/*.js'
+  ]
     .pipe gulp.dest './public/'
 
 gulp.task 'watch', ->

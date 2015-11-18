@@ -71,6 +71,9 @@ init = (client) ->
   if !localStorage.getItem 'musicpath'
     $('#settings').show()
   else
+    # load existing library
+
+    # start library sync
     client.readdir (localStorage.getItem 'musicpath'), (error, entries) ->
       if error?
         return handleError error
