@@ -4,6 +4,7 @@ html(lang="en")
     title Music
     meta(charset="utf-8")
     link(rel="stylesheet" href="music.css")
+    link(rel="stylesheet" href="bbplayer/css/bbplayer.css")
   body
     div.container
       header
@@ -17,8 +18,29 @@ html(lang="en")
         form#settingsform
           label Music Path
           input#musicpath(type="text")
-          input#savesettings(type="button" value="Save")
+          input#savesettings(type="submit" value="Save")
+      div#coverart
+        img(alt="Cover Art" src="generic.png")
+      div#dummyplayer.player
+        div.dummybb
+          span.bb-rewind
+          span.bb-play
+          span.bb-forward
+          div.playerWindow
+            span.bb-trackTime --:--
+            span.bb-trackTitle &nbsp;
+            span.bb-trackLength --:--
+          div.bb-album-display
+            span.bb-album &nbsp;
+          audio
+      div#player.player
+      div#albums
+        ul
+      div#songs
+        ul
+
     script(src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js")
+    script(src="//cdn.jsdelivr.net/bluebird/3.0.5/bluebird.js")
     script(src="//code.jquery.com/jquery-2.1.4.min.js")
-    script(src="indexeddbshim.min.js")
+    script(src="bbplayer/bbplayer.js")
     script(src="music.js")
