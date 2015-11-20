@@ -1,6 +1,6 @@
 # Dropbox Music Player
 
-Super simple, responsive static-site music player that can stream music from Dropbox folders, using only HTML and Javascript.
+Super simple, responsive static-site HTML5 music player that can stream music from Dropbox folders, using only HTML and Javascript.
 
 Online demo: https://music.sitosis.com
 
@@ -75,3 +75,12 @@ You can also run it locally using the gulp `connect` task, then point your brows
 ```
 $ gulp connect
 ```
+
+## Libraries Used
+
+- [JQuery](http://jquery.com)
+- [dropbox.js](https://github.com/dropbox/dropbox-js)
+- [bbplayer](https://github.com/73rhodes/bbplayer)
+- [Bootstrap](http://getbootstrap.com)
+- [Bootbox.js](http://bootboxjs.com)
+- [Bluebird](https://github.com/petkaantonov/bluebird)
