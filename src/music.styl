@@ -31,53 +31,184 @@ body
 .player *
   box-sizing unset
 
-#maincontent, #maincontent .row
+#wrapper
+  padding-left 0
   height 100%
+  transition all 0.5s ease
+  &.toggled
+    padding-left 250px
+    #sidebar-wrapper
+      width 250px
+    #page-content-wrapper
+      position absolute
+      margin-right -250px
 
-#playerwindow
-  background-image url('generic.png')
-  background-size 100%
-  background-position center center
+#sidebar-wrapper
+  z-index 1000
+  position fixed
+  top 0
+  bottom 0
+  left 250px
+  margin-top 50px
+  width 0
+  margin-left -250px
+  overflow-y auto
+  overflow-x hidden
+  background-color #000
+  transition all 0.5s ease
+
+#page-content-wrapper
+  width 100%
+  position absolute
+  padding 15px
   min-height 100%
-  height 100%
+  background-image url('generic.png')
+  background-size cover
+  background-position center center
+  background-attachment fixed
+  #songs
+    margin-top 20px
+    ul
+      list-style none
+      margin 0
+      padding 0
+      li
+        font-size 1.5em
+        a
+          color #fff
+          text-shadow -1px -1px 2px #000, -1px 1px 2px #000, 1px -1px 2px #000, 1px 1px 2px #000
 
-.navbar-fixed-top
-  border 0
-
-.sidebar
-  display none
-
-@media (min-width 768px)
-  .sidebar
-    position fixed
-    top 51px
-    bottom 0
-    left 0
-    z-index 1000
-    display block
-    padding 20px
-    overflow-x hidden
-    overflow-y auto
-    background-color #f5f5f5
-    border-right 1px solid #eee
-
-.nav-sidebar
-  margin-right -21px
-  margin-bottom 20px
-  margin-left -20px
+.sidebar-nav
+  position absolute
+  top 40px
+  width 250px
+  margin 0
+  padding 0
+  list-style none
   li
     a
-      padding-right 20px
-      padding-left 20px
-  .active
-    a, a:hover, a:focus
-      color #fff
-      background-color #428bca
+      padding 10px 15px 10px 5px
+      display block
+      text-decoration none
+      color #999
+      &:hover
+        color #fff
+        background-color #444
+    &.active, &.active a:hover
+      background-color #024
 
-.main
-  padding 20px
-@media (min-width 768px)
-  .main
-    padding-right 40px
-    padding-left 40px
+@media(min-width: 768px)
 
+  #wrapper
+    padding-left 250px
+    &.toggled
+      padding-left 0
+      #sidebar-wrapper
+        width 0
+      #page-content-wrapper
+        position relative
+        margin-right 0
+
+  #sidebar-wrapper
+    width 250px
+
+  #page-content-wrapper
+    padding 20px
+    position relative
+
+#loader
+  display none
+  position absolute
+  z-index 2000
+  top 0
+  left 0
+  width 100%
+  height 100%
+  text-align center
+  background-color rgba(0, 0, 0, 0.5)
+  overflow hidden
+  line-height auto
+  box-sizing unset
+
+.cssload-whirlpool,
+.cssload-whirlpool::before,
+.cssload-whirlpool::after {
+  box-sizing: unset;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 6px solid rgb(204,204,204);
+  border-left-color: rgb(0,0,0);
+  border-radius: 5869px;
+    -o-border-radius: 5869px;
+    -ms-border-radius: 5869px;
+    -webkit-border-radius: 5869px;
+    -moz-border-radius: 5869px;
+}
+
+.cssload-whirlpool {
+  margin: -147px 0 0 -147px;
+  height: 294px;
+  width: 294px;
+  animation: cssload-rotate 2650ms linear infinite;
+    -o-animation: cssload-rotate 2650ms linear infinite;
+    -ms-animation: cssload-rotate 2650ms linear infinite;
+    -webkit-animation: cssload-rotate 2650ms linear infinite;
+    -moz-animation: cssload-rotate 2650ms linear infinite;
+}
+
+.cssload-whirlpool::before {
+  content: "";
+  margin: -135px 0 0 -135px;
+  height: 259px;
+  width: 259px;
+  animation: cssload-rotate 2650ms linear infinite;
+    -o-animation: cssload-rotate 2650ms linear infinite;
+    -ms-animation: cssload-rotate 2650ms linear infinite;
+    -webkit-animation: cssload-rotate 2650ms linear infinite;
+    -moz-animation: cssload-rotate 2650ms linear infinite;
+}
+
+.cssload-whirlpool::after {
+  content: "";
+  margin: -170px 0 0 -170px;
+  height: 329px;
+  width: 329px;
+  animation: cssload-rotate 5300ms linear infinite;
+    -o-animation: cssload-rotate 5300ms linear infinite;
+    -ms-animation: cssload-rotate 5300ms linear infinite;
+    -webkit-animation: cssload-rotate 5300ms linear infinite;
+    -moz-animation: cssload-rotate 5300ms linear infinite;
+}
+
+
+
+@keyframes cssload-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes cssload-rotate {
+  100% {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframes cssload-rotate {
+  100% {
+    -ms-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes cssload-rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes cssload-rotate {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
