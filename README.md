@@ -68,7 +68,7 @@ $ npm install
 $ gulp
 ```
 
-To run, configure your webserver to serve the files in `dropbox-music-player/public`.
+To run, configure your webserver to serve the files in `dropbox-music-player/public`. You will need to configure the site to use SSL since Dropbox will only authenticate users at `https://` urls except for when running on `localhost`.
 
 You can also run it locally using the gulp `connect` task, then point your browser to `http://localhost:9002`:
 
