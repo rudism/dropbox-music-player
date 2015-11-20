@@ -3,44 +3,58 @@ html(lang="en")
   head
     title Music
     meta(charset="utf-8")
-    link(rel="stylesheet" href="music.css")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+    //link(rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css")
     link(rel="stylesheet" href="bbplayer/css/bbplayer.css")
+    link(rel="stylesheet" href="music.css")
   body
-    div.container
-      header
-        div.nav
-          ul
-            li.signedin#user
+
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      div.container
+        div.navbar-header
+          button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href="#") Music
+        div#navbar.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li.signedin#signout: a(href="#") Sign Out
             li.signedin: a#settingslink(href="#") Settings
             li#signin: a(href="#") Sign In
-            li#signout: a(href="#") Sign Out
-      div#settings
-        form#settingsform
-          label Music Path
-          input#musicpath(type="text")
-          input#savesettings(type="submit" value="Save")
-      div#coverart
-        img(alt="Cover Art" src="generic.png")
-      div#dummyplayer.player
-        div.dummybb
-          span.bb-rewind
-          span.bb-play
-          span.bb-forward
-          div.playerWindow
-            span.bb-trackTime --:--
-            span.bb-trackTitle &nbsp;
-            span.bb-trackLength --:--
-          div.bb-album-display
-            span.bb-album &nbsp;
-          audio
-      div#player.player
-      div#albums
-        ul
-      div#songs
-        ul
 
+    div#maincontent.container-fluid
+      div.row
+        div#albums.col-sm-3.col-md-2.sidebar
+          ul.nav.nav-sidebar
+
+        div#playerwindow.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+          div#settings
+            form#settingsform
+              label Music Path
+              input#musicpath(type="text")
+              input#savesettings(type="submit" value="Save")
+          div#dummyplayer.player
+            div.dummybb
+              span.bb-rewind
+              span.bb-play
+              span.bb-forward
+              div.playerWindow
+                span.bb-trackTime --:--
+                span.bb-trackTitle &nbsp;
+                span.bb-trackLength --:--
+              div.bb-album-display
+                span.bb-album &nbsp;
+              audio
+          div#player.player
+          div#songs
+            ul
+
+    script(src="//code.jquery.com/jquery-2.1.4.min.js")
+    script(src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
     script(src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js")
     script(src="//cdn.jsdelivr.net/bluebird/3.0.5/bluebird.js")
-    script(src="//code.jquery.com/jquery-2.1.4.min.js")
     script(src="bbplayer/bbplayer.js")
     script(src="music.js")

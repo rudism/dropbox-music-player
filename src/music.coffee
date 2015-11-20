@@ -1,6 +1,7 @@
 client = null
 
 $(document).ready ->
+  $('.signedin').hide()
   $.getJSON 'config.json', (data) ->
     client = new Dropbox.Client key: data.dropbox_key
     client.authenticate interactive: false, (error, client) ->
@@ -58,7 +59,7 @@ signedIn = ->
   client.getAccountInfo (error, accountInfo) ->
     if error?
       return handleError error
-    $('#user').html accountInfo.email
+    $('#signout a').html 'Sign Out ' + accountInfo.email
 
 signedOut = ->
   $('#signout').hide()
@@ -68,6 +69,7 @@ signedOut = ->
   destroy()
 
 stopPlaying = ->
+  $('#playerwindow').css 'background-image', 'url("generic.png")'
   $('#player').data('bbplayer')?.bbaudio?.pause()
   $('#player').hide().empty()
   $('#dummyplayer').show()
@@ -75,9 +77,9 @@ stopPlaying = ->
 
 init = ->
   stopPlaying()
-  $('#coverart img').attr 'src', 'generic.png'
   $('#albums ul').empty()
-  if !localStorage.getItem 'musicpath'
+  root = localStorage.getItem 'musicpath'
+  if !root?
     $('#settings').show()
   else
     readAlbums()
@@ -93,6 +95,8 @@ readAlbums = ->
       return handleError error
     for entry in entries
       album = $('<a href="#">').html(entry).click ->
+        $('#albums ul li').removeClass 'active'
+        $(this).parent('li').addClass 'active'
         loadAlbum $(this).text()
       $('#albums ul').append($('<li>').append album)
 
@@ -122,10 +126,8 @@ loadAlbum = (album) ->
               $('#player').data('bbplayer').bbaudio.play()
               return false
           else if !coverset and data.name.match /\.(jpg|png)$/i
-            $('#coverart img').attr 'src', data.url
+            $('#playerwindow').css 'background-image', 'url("' + data.url + '")'
             coverset = true
-        if !coverset
-          $('#coverart img').attr 'src', 'generic.png'
         $('#dummyplayer').hide()
         $('#player').show()
         bbplayer = new BBPlayer $('#player .bbplayer')[0]
