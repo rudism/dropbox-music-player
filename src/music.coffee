@@ -199,7 +199,8 @@ getUrlData = (album, name) ->
     path = album + '/' + name
     client.makeUrl path, download: true, (error, urlData) ->
       if error?
-        reject 'Error retrieving url for ' + name
+        handleDropboxError error
+        reject()
       else
         resolve
           name: name
