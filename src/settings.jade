@@ -1,0 +1,12 @@
+.form-group
+  label(for="musicpath") Music Directory
+  input#musicpath.form-control(type="text" placeholder="/path/to/albums")
+  span.helpBlock This should be relative to the root of your Dropbox directory. For example if you keep all of your albums in a Dropbox folder called "Music," you would enter "/Music" here. This value is case sensitive.
+.form-group
+  label(for="scansubs") Album Containers
+  input#scansubs.form-control(type="text")
+  span.helpBlock Any folders in your music directory that match this <a href="http://www.regular-expressions.info/" target="_blank">Regular Expression</a> will be scanned for albums inside it instead of listed as an album. This is case insensitive.
+.form-group
+  label(for="ignoredirs") Ignore Directories
+  input#ignoredirs.form-control(type="text")
+  span.helpBlock Any directories found that match this <a href="http://www.regular-expressions.info/" target="_blank">Regular Expression</a> will be ignored entirely. This is case insensitive.

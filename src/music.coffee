@@ -9,7 +9,7 @@ $(document).ready ->
     client = new Dropbox.Client key: data.dropbox_key
     client.authenticate interactive: false, (error, client) ->
       if error?
-        handleError 'Dropbox Error', getMsgFromDropboxError error
+        handleDropboxError error
 
       if client.isAuthenticated()
         signedIn()
@@ -20,7 +20,7 @@ $(document).ready ->
   $('#signout a').click ->
     client.signOut (error) ->
       if error?
-        return handleError 'Dropbox Error', getMsgFromDropboxError error
+        return handleDropboxError error
 
       signedOut()
       return false
@@ -28,7 +28,7 @@ $(document).ready ->
   $('#signin a').click ->
     client.authenticate (error, client) ->
       if error?
-        return handleError 'Dropbox Error', getMsgFromDropboxError error
+        return handleDropboxError error
 
       signedIn()
       init()
@@ -36,13 +36,25 @@ $(document).ready ->
     return false
 
   $('#settingslink').click ->
-    bootbox.prompt
-      title: 'Album Path'
-      value: localStorage.getItem 'musicpath'
-      callback: (result) ->
-        if result?
-          localStorage.setItem 'musicpath', result
-          init()
+    loading true
+    $.get 'settings.html', (data) ->
+      bootbox.dialog
+        title: 'Settings'
+        message: data
+        buttons:
+          "Save":
+            className: 'btn-success'
+            callback: ->
+              localStorage.setItem 'musicpath', $('#musicpath').val()
+              localStorage.setItem 'scansubs', $('#scansubs').val()
+              localStorage.setItem 'ignoredirs', $('#ignoredirs').val()
+              init()
+          "Cancel":
+            className: 'btn-default'
+      $('#musicpath').val localStorage.getItem 'musicpath'
+      $('#scansubs').val localStorage.getItem 'scansubs'
+      $('#ignoredirs').val localStorage.getItem 'ignoredirs'
+      loading false
 
   $('#togglealbums').click ->
     $('#wrapper').toggleClass 'toggled'
@@ -57,16 +69,21 @@ $(document).ready ->
   .keyup ->
     $(this).change()
 
-getMsgFromDropboxError = (error) ->
-  message = "An unknown error occurred, please refresh the page and try again."
+handleDropboxError = (error) ->
   switch error.status
-    when Dropbox.ApiError.INVALID_TOKEN then message = "Invalid authentication token, try signing out and back in to Dropbox."
-    when Dropbox.ApiError.NOT_FOUND then message = "The specified path was not found."
-    when Dropbox.ApiError.RATE_LIMITED then message = "You've exceeded your API rate limit, try again later."
-    when Dropbox.ApiError.NETWORK_ERROR then message = "There was a network error, check your internet connection."
-  return message
+    when Dropbox.ApiError.INVALID_TOKEN
+      signedOut()
+      displayError 'Dropbox Error', "Your authentication token has expired. Please sign in again."
+    when Dropbox.ApiError.NOT_FOUND
+      displayError 'Dropbox Error', "The specified path was not found."
+    when Dropbox.ApiError.RATE_LIMITED
+      displayError 'Dropbox Error', "You've exceeded your API rate limit, try again later."
+    when Dropbox.ApiError.NETWORK_ERROR
+      displayError 'Dropbox Error', "There was a network error, check your internet connection."
+    else
+      displayError 'Dropbox Error', "An unexpected error occurred. Please refresh the page and try again."
 
-handleError = (title, message) ->
+displayError = (title, message) ->
   loading false
   bootbox.dialog
     title: title
@@ -82,7 +99,7 @@ signedIn = ->
   $('.signedin').show()
   client.getAccountInfo (error, accountInfo) ->
     if error?
-      return handleError 'Dropbox Error', getMsgFromDropboxError error
+      return handleDropboxError error
 
 signedOut = ->
   $('#signout').hide()
@@ -113,25 +130,28 @@ destroy = ->
   stopPlaying()
   $('#albums').empty()
   $('#search').val ''
-  localStorage.removeItem 'musicpath'
+  client.reset()
 
 readAlbums = (path) ->
   new Promise (resolve, reject) ->
     subs = []
-    client.readdir path, (error, entries) ->
+    client.readdir path, (error, entries, dir, contents) ->
       if error?
-        handleError 'Dropbox Error', getMsgFromDropboxError error
+        handleDropboxError error
         resolve()
-      if entries?
-        for entry in entries
-          if !entry.match /\.(mp3|ogg|m4a|png|jpg)$/i
-            album = $('<a href="#">').attr('data-path', path + '/' + entry).html(entry).click ->
-              $('#albums li').removeClass 'active'
-              $(this).parent('li').addClass 'active'
-              loadAlbum $(this).attr 'data-path'
-            $('#albums').append($('<li>').append album)
-            if entry.match /^_/
-              subs.push readAlbums path + '/' + entry
+      scansubs = localStorage.getItem 'scansubs'
+      ignoredirs = localStorage.getItem 'ignoredirs'
+      if contents?
+        for entry in contents
+          if entry.isFolder
+            if scansubs? and entry.name.match new RegExp scansubs, 'i'
+              subs.push readAlbums path + '/' + entry.name
+            else if !ignoredirs? or not entry.name.match new RegExp ignoredirs, 'i'
+              album = $('<a href="#">').attr('data-path', path + '/' + entry.name).html(entry.name).click ->
+                $('#albums li').removeClass 'active'
+                $(this).parent('li').addClass 'active'
+                loadAlbum $(this).attr 'data-path'
+              $('#albums').append($('<li>').append album)
       if subs.length > 0
         P.all(subs).then ->
           resolve()
@@ -143,7 +163,7 @@ loadAlbum = (album) ->
   stopPlaying()
   client.readdir album, (error, entries) ->
     if error?
-      return handleError 'Dropbox Error', getMsgFromDropboxError error
+      return handleDropboxError error
     $.get 'player.html', (data) ->
       $('#player').html data
       $('#player').find('.bb-album').html album
