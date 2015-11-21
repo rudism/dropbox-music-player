@@ -83,14 +83,17 @@ handleDropboxError = (error) ->
     else
       displayError 'Dropbox Error', "An unexpected error occurred. Please refresh the page and try again."
 
+displayed = false
 displayError = (title, message) ->
-  loading false
-  bootbox.dialog
-    title: title
-    message: message
-    buttons:
-      "Close":
-        className: 'btn-danger'
+  if !displayed
+    displayed = true
+    loading false
+    bootbox.alert
+      title: title
+      message: message
+      callback: ->
+        bootbox.hideAll()
+        displayed = false
   return false
 
 signedIn = ->
@@ -192,6 +195,8 @@ loadAlbum = (album) ->
         $('#player').data 'bbplayer', bbplayer
         loading false
         $('#player').data('bbplayer').bbaudio.play()
+      .error (e) ->
+        console.log e.message
   return false
 
 getUrlData = (album, name) ->
@@ -200,7 +205,7 @@ getUrlData = (album, name) ->
     client.makeUrl path, download: true, (error, urlData) ->
       if error?
         handleDropboxError error
-        reject()
+        reject new Error()
       else
         resolve
           name: name
