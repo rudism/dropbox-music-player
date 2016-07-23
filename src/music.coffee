@@ -147,9 +147,9 @@ readAlbums = (path) ->
       if contents?
         for entry in contents
           if entry.isFolder
-            if scansubs? and entry.name.match new RegExp scansubs, 'i'
+            if scansubs? and scansubs != '' and entry.name.match new RegExp scansubs, 'i'
               subs.push readAlbums path + '/' + entry.name
-            else if !ignoredirs? or not entry.name.match new RegExp ignoredirs, 'i'
+            else if !ignoredirs? or ignoredirs == '' or not entry.name.match new RegExp ignoredirs, 'i'
               album = $('<a href="#">').attr('data-path', path + '/' + entry.name).html(entry.name).click ->
                 $('#albums li').removeClass 'active'
                 $(this).parent('li').addClass 'active'
