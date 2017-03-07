@@ -172,13 +172,13 @@ loadAlbum = (album) ->
       $('#player').find('.bb-album').html album
       makeUrls = []
       for entry in entries
-        if entry.match /\.(mp3|ogg|m4a|jpg|png)$/i
+        if entry.match /\.(mp3|ogg|jpg|png)$/i
           makeUrls.push getUrlData album, entry
       Promise.all(makeUrls).then (urlData) ->
         track = 0
         coverset = false
         for data in urlData
-          if data.name.match /\.(mp3|ogg|m4a)$/i
+          if data.name.match /\.(mp3|ogg)$/i
             source = $('<source>').attr 'src', data.url
             source.attr 'data-album', album
             $('#playlist').append source
