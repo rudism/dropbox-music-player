@@ -1,3 +1,5 @@
+__NOTE:__ _This project uses a deprecated version of the Dropbox API that is no longer supported and therefore no longer works. This project is not being maintained anymore._
+
 # Dropbox Music Player
 
 Super simple, responsive, static HTML5 music player that can stream music from Dropbox folders. Displays album art in the background (when available). There is no server component, it runs client-side in the browser using HTML and Javascript.
